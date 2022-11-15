@@ -108,3 +108,19 @@ func (v *Value) SetArrayItem(idx int, value *Value) {
 	}
 	v.a[idx] = value
 }
+
+// InsertArrayItem inserts the value in the array v at idx position.
+// shifting other values
+//
+// The value must be unchanged during v lifetime.
+func (v *Value) InsertArrayItem(idx int, value *Value) {
+	if v == nil || v.t != TypeArray {
+		return
+	}
+	for idx >= len(v.a) {
+		v.a = append(v.a, valueNull)
+	}
+
+	v.a = append(v.a[:idx+1], v.a[idx:]...)
+	v.a[idx] = value
+}
